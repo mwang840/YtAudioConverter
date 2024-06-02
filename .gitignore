@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 tempCodeRunnerFile.*
 *.mp4
+*.mp3
