@@ -2,4 +2,7 @@
 * Script to download youtube videos as audio only mp3 files
 
 # Dependencies Needed
-* Pytube, MoviePy and Requests
+* Pytube, MoviePy, Pydub and Requests
+
+# About this Project
+* The origin behind this project was to 

@@ -4,6 +4,7 @@ from moviepy.editor import *
 import os
 from tkinter import *
 
+
 def downloadYtClip(current_url: str):
     """
     Takes in the current youtube link you want to download and returns the path where you downloaded the file
@@ -36,6 +37,9 @@ def downloadYtClip(current_url: str):
     return
 
 def convertToMp3(clip: str, outputPath: str):
+    """
+    Takes in
+    """
     try:
         downloadedClip = VideoFileClip(clip)
         audioClip  = downloadedClip.audio
@@ -44,7 +48,7 @@ def convertToMp3(clip: str, outputPath: str):
         downloadedClip.close()
     except Exception as error:
         print("Looks like you got an error", error)
-    
+
 
 def main():
     ##Grabs user input, which is a string and must be from the youtube site
