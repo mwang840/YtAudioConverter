@@ -2,7 +2,8 @@ from pytube import YouTube
 import requests
 from moviepy.editor import *
 import os
-from tkinter import *
+import tkinter as tk
+from tkinter import ttk
 
 
 def downloadYtClip(current_url: str):
@@ -38,14 +39,21 @@ def downloadYtClip(current_url: str):
 
 def convertToMp3(clip: str, outputPath: str):
     """
-    Takes in
+    Takes in the current path where the downloaded clip is in and the output directory path where you want to store your mp3 file
+    Converts to mp3 then stores it in the path
     """
+    ##Try catch block
     try:
+        #Convert the location where the downloaded file is located in
         downloadedClip = VideoFileClip(clip)
+        #Grab the audio of that downloaded video file clip
         audioClip  = downloadedClip.audio
+        #Writes the audio file
         audioClip.write_audiofile(outputPath, codec='libmp3lame')
+        #Close the audio file and the clip
         audioClip.close()
         downloadedClip.close()
+    # Raise exception error
     except Exception as error:
         print("Looks like you got an error", error)
 
@@ -64,7 +72,15 @@ def main():
         dirPath = os.path.dirname(downloadedClip)
         mp3_file_path = os.path.join(dirPath, os.path.basename(downloadedClip).replace(".mp4", ".mp3"))
         convertToMp3(downloadedClip, mp3_file_path)
+    
+    currentFrame = tk.Tk()
+    currentFrame.title("Youtube to mp3 audio converter")
+    currentFrame.geometry('400x200')
 
-
+    lbl = tk.Label(currentFrame, text = "Enter the youtube video you want to convert\n")
+    userInputtxt = tk.Text(currentFrame)
+    lbl.pack() 
+    userInputtxt.pack()
+    currentFrame.mainloop()  
 if __name__ in "__main__":
     main()
