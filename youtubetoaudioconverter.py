@@ -3,7 +3,7 @@ import requests
 from moviepy.editor import *
 import os
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 
 
 def downloadYtClip(current_url: str):
@@ -58,6 +58,7 @@ def convertToMp3(clip: str, outputPath: str):
         print("Looks like you got an error", error)
 
 
+
 def main():
     ##Grabs user input, which is a string and must be from the youtube site
     current_url  = str(input("Enter the youtube video you want to convert\n"))
@@ -76,11 +77,22 @@ def main():
     currentFrame = tk.Tk()
     currentFrame.title("Youtube to mp3 audio converter")
     currentFrame.geometry('400x200')
-
     lbl = tk.Label(currentFrame, text = "Enter the youtube video you want to convert\n")
-    userInputtxt = tk.Text(currentFrame)
+    userInputtxt = tk.Text(currentFrame, height=2, width=50)
     lbl.pack() 
     userInputtxt.pack()
+
+    def handleTkinterInput():
+        songInput = userInputtxt.get(1.0, "end-1c")
+        downloadedYtClip = downloadYtClip(songInput)
+        if downloadedYtClip != None:
+            currentPath = filedialog.askdirectory()
+            if not os.path.exists(currentPath):
+                os.makedirs(currentPath)
+            mp3FilePath = os.path.join(currentPath, os.path.basename(downloadedYtClip).replace(".mp4", ".mp3"))
+            convertToMp3(downloadedClip, mp3FilePath)
+    convert_button = tk.Button(currentFrame, text="Convert", command=handleTkinterInput)
+    convert_button.pack()
     currentFrame.mainloop()  
 if __name__ in "__main__":
     main()
