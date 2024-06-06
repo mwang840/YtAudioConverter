@@ -58,27 +58,14 @@ def convertToMp3(clip: str, outputPath: str):
         print("Looks like you got an error", error)
 
 
-
+#Where the tkinter fun begins
 def main():
-    ##Grabs user input, which is a string and must be from the youtube site
-    current_url  = str(input("Enter the youtube video you want to convert\n"))
-    downloadedClip = downloadYtClip(current_url)
-    print(downloadedClip)
-   
-    if downloadedClip != None:
-        current_path = str(input("Enter the folder/directory you want to place your downloaded song into\n"))
-        if not os.path.exists(current_path):
-            os.makedirs(current_path)
-
-        dirPath = os.path.dirname(downloadedClip)
-        mp3_file_path = os.path.join(dirPath, os.path.basename(downloadedClip).replace(".mp4", ".mp3"))
-        convertToMp3(downloadedClip, mp3_file_path)
     
     currentFrame = tk.Tk()
     currentFrame.title("Youtube to mp3 audio converter")
     currentFrame.geometry('400x200')
     lbl = tk.Label(currentFrame, text = "Enter the youtube video you want to convert\n")
-    userInputtxt = tk.Text(currentFrame, height=2, width=50)
+    userInputtxt = tk.Text(currentFrame, height=20, width=50)
     lbl.pack() 
     userInputtxt.pack()
 
@@ -90,9 +77,11 @@ def main():
             if not os.path.exists(currentPath):
                 os.makedirs(currentPath)
             mp3FilePath = os.path.join(currentPath, os.path.basename(downloadedYtClip).replace(".mp4", ".mp3"))
-            convertToMp3(downloadedClip, mp3FilePath)
+            convertToMp3(downloadedYtClip, mp3FilePath)
     convert_button = tk.Button(currentFrame, text="Convert", command=handleTkinterInput)
     convert_button.pack()
-    currentFrame.mainloop()  
+    currentFrame.mainloop()
+    convert_button.quit()
+    currentFrame.quit()  
 if __name__ in "__main__":
     main()
