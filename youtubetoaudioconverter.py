@@ -65,7 +65,7 @@ def main():
     currentFrame.title("Youtube to mp3 audio converter")
     currentFrame.geometry('400x200')
     lbl = tk.Label(currentFrame, text = "Enter the youtube video you want to convert\n")
-    userInputtxt = tk.Text(currentFrame, height=20, width=50)
+    userInputtxt = tk.Text(currentFrame, height=2, width=30)
     lbl.pack() 
     userInputtxt.pack()
 
