@@ -3,7 +3,7 @@ import requests
 from moviepy.editor import *
 import os
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import filedialog
 
 
 def downloadYtClip(current_url: str):
@@ -40,7 +40,7 @@ def downloadYtClip(current_url: str):
 def convertToMp3(clip: str, outputPath: str):
     """
     Takes in the current path where the downloaded clip is in and the output directory path where you want to store your mp3 file
-    Converts to mp3 then stores it in the path
+    Converts to mp3 format then stores it in the path
     """
     ##Try catch block
     try:
@@ -57,6 +57,22 @@ def convertToMp3(clip: str, outputPath: str):
     except Exception as error:
         print("Looks like you got an error", error)
 
+def convertToWav(clip:str, outputPath:str):
+    """
+    Takes in the current path where the downloaded clip is in and the output directory path where you want to store your wav file
+    Converts to wav format then stores it in the path
+    """
+    try:
+        downloadedClip = VideoFileClip(clip)
+        #Grab the audio of that downloaded video file clip
+        audioClip  = downloadedClip.audio
+        #Writes the audio file
+        audioClip.write_audiofile(outputPath, codec='libwavlame')
+        audioClip.close()
+        downloadedClip.close()
+    # Raise exception error
+    except Exception as error:
+        print("Looks like you got an error", error)
 
 #Where the tkinter fun begins
 def main():
@@ -69,7 +85,17 @@ def main():
     lbl.pack() 
     userInputtxt.pack()
 
-    def handleTkinterInput():
+    def handleTkinterWavInput():
+        songInput = userInputtxt.get(1.0, "end-1c")
+        downloadedYtClip = downloadYtClip(songInput)
+        if downloadedYtClip != None:
+            currentPath = filedialog.askdirectory()
+            if not os.path.exists(currentPath):
+                os.makedirs(currentPath)
+            mp3FilePath = os.path.join(currentPath, os.path.basename(downloadedYtClip).replace(".mp4", ".wav"))
+            convertToMp3(downloadedYtClip, mp3FilePath)
+
+    def handleTkinterMp3Input():
         songInput = userInputtxt.get(1.0, "end-1c")
         downloadedYtClip = downloadYtClip(songInput)
         if downloadedYtClip != None:
@@ -78,10 +104,13 @@ def main():
                 os.makedirs(currentPath)
             mp3FilePath = os.path.join(currentPath, os.path.basename(downloadedYtClip).replace(".mp4", ".mp3"))
             convertToMp3(downloadedYtClip, mp3FilePath)
-    convert_button = tk.Button(currentFrame, text="Convert", command=handleTkinterInput, bg="aqua", fg="purple")
-    convert_button.pack()
+    convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3", command=handleTkinterMp3Input, bg="aqua", fg="purple")
+    convert_to_mp3_button.pack()
+    handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav", command=handleTkinterWavInput, bg="aqua", fg="purple")
+    handleTkinterWavInputButton.pack()
     currentFrame.mainloop()
-    convert_button.quit()
+    convert_to_mp3_button.quit()
+    handleTkinterWavInputButton.quit()
     currentFrame.quit()  
 if __name__ in "__main__":
     main()
