@@ -40,8 +40,51 @@ def downloadAsMp3(ytLink: str):
                 return "Downloading video failed"
     return
 
+def downloadAsWav(ytLink: str):
+    """
+    Takes in the current youtube link you want to download, downloads it as an mp3 file and returns the path where you downloaded the file
+    
+    Args:
+    current_url (str), the youtube link passed in
 
-def saveMp3Path(path, output):
+    """
+
+    req = requests.head(ytLink, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'}).url
+    if "youtube.com" in req:
+        try:
+            ytdl_options = {
+        'format': 'wav/bestaudio/best',
+        'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'wav',
+        }],
+        'outtmpl': 'Downloads/%(title)s.%(ext)s'
+    }
+            '''
+            Create a YoutubeDL object with the given options passed in, extract the information about the link
+            and then prepares the output file with the output file name as an .mp3 file
+            '''
+            with YoutubeDL(ytdl_options) as ydl:
+                current_file = ydl.extract_info(ytLink)
+                ytFileName = ydl.prepare_filename(current_file).replace(".webm", ".wav").replace(".m4a", ".wav")
+                return ytFileName
+            '''
+            Otherwise it fails to download and returns a 500 error
+            '''
+        except:
+                print("Video Failed, please try again!")
+                return "Downloading video failed"
+    return
+
+
+def saveMp3Path(path: str, output: str):
+     """
+    Converts the downloaded clip to MP3 format and saves it to the specified output path.
+    
+    Args:
+    path (str): The path to the downloaded video clip
+    output (str): The path to save the converted MP3 file
+    """
      try:
           downloadedClip = VideoFileClip(path)
           audioClip = downloadedClip.audio
@@ -54,12 +97,35 @@ def saveMp3Path(path, output):
             downloadedClip.close()
         if 'audioClip' in locals():
             audioClip.close()
-     pass
+     return
+
+def saveWavPath(path: str, output: str):
+     """
+    Converts the downloaded clip to wav format and saves it to the specified output path.
+    
+    Args:
+    clip (str): The path to the downloaded video clip
+    outputPath (str): The path to save the converted wav file
+    """
+     try:
+        downloadedClip = VideoFileClip(path)
+        audioClip = downloadedClip.audio
+        # Writes the audio file - WAV doesn't need a codec specification
+        audioClip.write_audiofile(output)
+        audioClip.close()
+        downloadedClip.close()
+     except Exception as error:
+        print("Error in convertToWav:", error)
+        if 'downloadedClip' in locals():
+            downloadedClip.close()
+        if 'audioClip' in locals():
+            audioClip.close()
+     return
 
 def main():
     currentFrame = tk.Tk()
-    currentFrame.title("Youtube to mp3 audio converter")
-    currentFrame.geometry('400x200')
+    currentFrame.title("YouTube Audio Converter")
+    currentFrame.geometry('500x300')
     lbl = tk.Label(currentFrame, text = "Enter the youtube video you want to convert.\n NOTE it has to be a youtube url.\n", foreground="red")
     userInputtxt = tk.Text(currentFrame, height=2, width=30)
     lbl.pack() 
@@ -67,7 +133,7 @@ def main():
 
     def handleTkinterMp3Input():
          """
-         A function to handle whether the file that wants to be converted is in mp3 format or wav format
+         A function to handle whether the file that wants to be converted is in mp3 format
          Asks input from the tkinter
          """
          songInput = userInputtxt.get(1.0, "end-1c")
@@ -78,6 +144,7 @@ def main():
                  os.makedirs(currentPath)
               # Create the destination path
               destinationPath = os.path.join(currentPath, os.path.basename(downloadYtMp3Clip))
+              saveMp3Path(downloadYtMp3Clip, destinationPath)
               # Move the file from Downloads to the selected directory
               if os.path.exists(downloadYtMp3Clip):
                   os.rename(downloadYtMp3Clip, destinationPath)
@@ -85,12 +152,31 @@ def main():
               else:
                   print(f"Source file not found: {downloadYtMp3Clip}")
          return
+    
+    def handleTkinterWavInput():
+            """
+            A function to handle whether the file that wants to be converted is in wav format
+            Asks input from the tkinter
+            """
+            songInput = userInputtxt.get(1.0, "end-1c")
+            downloadYtWavClip = downloadAsWav(songInput)
+            if downloadYtWavClip != None:
+                currentPath = filedialog.askdirectory()
+                if not os.path.exists(currentPath):
+                    os.makedirs(currentPath)
+                destinationPath = os.path.join(currentPath, os.path.basename(downloadYtWavClip))
+                saveWavPath(downloadYtWavClip, destinationPath)
+                if os.path.exists(downloadYtWavClip):
+                    os.rename(downloadYtWavClip, destinationPath)
+                    print(f"File saved to: {destinationPath}")
+                else:
+                    print(f"Source file not found: {downloadYtWavClip}")
 
     convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3", command=handleTkinterMp3Input)
     convert_to_mp3_button.place(x=500, y=90)
-    handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav")
+    handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav", command=handleTkinterWavInput)
     handleTkinterWavInputButton.pack()
-    handleTkinterWavInputButton.place(x=800, y=90)
+    handleTkinterWavInputButton.place(x=700, y=90)
     currentFrame.mainloop()
 
 if __name__ in "__main__":
