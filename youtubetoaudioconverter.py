@@ -3,8 +3,7 @@ from tkinter import filedialog
 import tkinter as tk
 import os
 import requests
-
-
+from moviepy import VideoFileClip
 def downloadAsMp3(ytLink: str):
     """
     Takes in the current youtube link you want to download, downloads it as an mp3 file and returns the path where you downloaded the file
@@ -43,6 +42,18 @@ def downloadAsMp3(ytLink: str):
 
 
 def saveMp3Path(path, output):
+     try:
+          downloadedClip = VideoFileClip(path)
+          audioClip = downloadedClip.audio
+          audioClip.write_audiofile(output, codec="libmp3lame")
+          audioClip.close()
+          pass
+     except Exception as error:
+        print("Error in convertToMp3:", error)
+        if 'downloadedClip' in locals():
+            downloadedClip.close()
+        if 'audioClip' in locals():
+            audioClip.close()
      pass
 
 def main():
@@ -57,17 +68,22 @@ def main():
     def handleTkinterMp3Input():
          """
          A function to handle whether the file that wants to be converted is in mp3 format or wav format
-         Asks input forom the tkinter
+         Asks input from the tkinter
          """
          songInput = userInputtxt.get(1.0, "end-1c")
          downloadYtMp3Clip = downloadAsMp3(songInput)
          if downloadYtMp3Clip != None:
               currentPath = filedialog.askdirectory()
-              print(os.path.exists(currentPath))
               if not os.path.exists(currentPath):
                  os.makedirs(currentPath)
-                 print(currentPath)
-              os.path.join(currentPath, os.path.basename(downloadYtMp3Clip).replace(".mp4", ".mp3"))
+              # Create the destination path
+              destinationPath = os.path.join(currentPath, os.path.basename(downloadYtMp3Clip))
+              # Move the file from Downloads to the selected directory
+              if os.path.exists(downloadYtMp3Clip):
+                  os.rename(downloadYtMp3Clip, destinationPath)
+                  print(f"File saved to: {destinationPath}")
+              else:
+                  print(f"Source file not found: {downloadYtMp3Clip}")
          return
 
     convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3", command=handleTkinterMp3Input)
