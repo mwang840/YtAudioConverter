@@ -2,7 +2,7 @@
 * Script and a GUI to download youtube videos as audio only mp3 and wav files
 
 # Dependencies Needed
-* Pytube, MoviePy, Tkinter and Requests
+* Yt-dlp, MoviePy, Tkinter and Requests as well as the other dependencies in the requirements.txt file below
 
 # About this Project
 * The origin behind this project was to extract audio from youtube video without the idea of going to third party websites (with the possibility of the sites stealing your information). This was the first time I utilized tkinter and further stepping into GUI development.
