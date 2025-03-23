@@ -128,7 +128,7 @@ def main():
     currentFrame.geometry('500x300')
     currentFrame.configure(bg="lightblue")
     lbl = tk.Label(currentFrame, font=("Arial", 15, "italic"), text = "Enter the youtube video you want to convert.\n NOTE it has to be a youtube url.\n", foreground="dark orange", bg="lightblue")
-    userInputtxt = tk.Text(currentFrame, height=2, width=30)
+    userInputtxt = tk.Text(currentFrame, height=1, width=25)
     lbl.pack() 
     userInputtxt.pack()
 
@@ -173,9 +173,9 @@ def main():
                 else:
                     print(f"Source file not found: {downloadYtWavClip}")
 
-    convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3 🎵", command=handleTkinterMp3Input, bg="lightblue")
+    convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3🎵", command=handleTkinterMp3Input, bg="lightblue")
     convert_to_mp3_button.place(x=500, y=130)
-    handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav", command=handleTkinterWavInput, bg="lightblue")
+    handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav〰", command=handleTkinterWavInput, bg="lightblue")
     handleTkinterWavInputButton.pack()
     handleTkinterWavInputButton.place(x=700, y=130)
     currentFrame.mainloop()
