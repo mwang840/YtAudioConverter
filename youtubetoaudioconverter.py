@@ -145,7 +145,6 @@ def main():
                  os.makedirs(currentPath)
               # Create the destination path
               destinationPath = os.path.join(currentPath, os.path.basename(downloadYtMp3Clip))
-              saveMp3Path(downloadYtMp3Clip, destinationPath)
               # Move the file from Downloads to the selected directory
               if os.path.exists(downloadYtMp3Clip):
                   os.rename(downloadYtMp3Clip, destinationPath)
@@ -166,7 +165,6 @@ def main():
                 if not os.path.exists(currentPath):
                     os.makedirs(currentPath)
                 destinationPath = os.path.join(currentPath, os.path.basename(downloadYtWavClip))
-                saveWavPath(downloadYtWavClip, destinationPath)
                 if os.path.exists(downloadYtWavClip):
                     os.rename(downloadYtWavClip, destinationPath)
                     print(f"File saved to: {destinationPath}")
