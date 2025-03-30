@@ -17,12 +17,13 @@ def downloadAsMp3(ytLink: str):
     if "youtube.com" in req:
         try:
             ytdl_options = {
-        'format': 'mp3/bestaudio/best',
+        'format': 'bestaudio/best',
         'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
         }],
-        'outtmpl': 'Downloads/%(title)s.%(ext)s'
+        'outtmpl': 'Downloads/%(title)s.%(ext)s',
+        
     }
             '''
             Create a YoutubeDL object with the given options passed in, extract the information about the link
@@ -53,12 +54,13 @@ def downloadAsWav(ytLink: str):
     if "youtube.com" in req:
         try:
             ytdl_options = {
-        'format': 'wav/bestaudio/best',
+        'format': 'bestaudio/best',
         'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'wav',
         }],
-        'outtmpl': 'Downloads/%(title)s.%(ext)s'
+        'outtmpl': 'Downloads/%(title)s.%(ext)s',
+        'keepvideo': False,
     }
             '''
             Create a YoutubeDL object with the given options passed in, extract the information about the link
@@ -68,6 +70,9 @@ def downloadAsWav(ytLink: str):
                 current_file = ydl.extract_info(ytLink)
                 ytFileName = ydl.prepare_filename(current_file).replace(".webm", ".wav").replace(".m4a", ".wav")
                 return ytFileName
+        except Exception as e:
+            print(f"Video download failed: {e}")
+            return None
             '''
             Otherwise it fails to download and returns a 500 error
             '''
@@ -124,6 +129,7 @@ def saveWavPath(path: str, output: str):
 
 def main():
     currentFrame = tk.Tk()
+    currentFrame.state("zoomed")
     currentFrame.title("YouTube Audio Converter")
     currentFrame.geometry('500x300')
     currentFrame.configure(bg="lightblue")
