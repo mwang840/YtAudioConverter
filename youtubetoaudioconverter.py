@@ -128,15 +128,23 @@ def saveWavPath(path: str, output: str):
      return
 
 def main():
+    #Setting up the GUI
     currentFrame = tk.Tk()
-    currentFrame.state("zoomed")
     currentFrame.title("YouTube Audio Converter")
     currentFrame.geometry('500x300')
     currentFrame.configure(bg="lightblue")
+
+    #Configuring the UI
+    currentFrame.columnconfigure(0, weight=1)
+    currentFrame.columnconfigure(1, weight=1)
+    currentFrame.rowconfigure(0, weight=1)
+    currentFrame.rowconfigure(1, weight=1)
+    currentFrame.rowconfigure(2, weight=1)
     lbl = tk.Label(currentFrame, font=("Arial", 15, "italic"), text = "Enter the youtube video you want to convert.\n NOTE it has to be a youtube url.\n", foreground="dark orange", bg="lightblue")
     userInputtxt = tk.Text(currentFrame, height=1, width=25)
-    lbl.pack() 
-    userInputtxt.pack()
+    lbl.grid(row=0, column=0, columnspan=2, pady=1, sticky="nsew")
+    userInputtxt = tk.Text(currentFrame, height=1, width=60)
+    userInputtxt.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky="n")
 
     def handleTkinterMp3Input():
          """
@@ -179,9 +187,10 @@ def main():
 
     convert_to_mp3_button = tk.Button(currentFrame, text="Convert to Mp3🎵", command=handleTkinterMp3Input, bg="lightblue")
     convert_to_mp3_button.place(x=500, y=130)
+    convert_to_mp3_button.grid(row=2, column=0, padx=25, pady=25, sticky="ne")
     handleTkinterWavInputButton = tk.Button(currentFrame, text="Convert to Wav〰", command=handleTkinterWavInput, bg="lightblue")
-    handleTkinterWavInputButton.pack()
     handleTkinterWavInputButton.place(x=700, y=130)
+    handleTkinterWavInputButton.grid(row=2, column=1, padx=25, pady=25, sticky="nw")
     currentFrame.mainloop()
 
 if __name__ in "__main__":
