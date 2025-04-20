@@ -60,7 +60,6 @@ def downloadAsWav(ytLink: str):
         'preferredcodec': 'wav',
         }],
         'outtmpl': 'Downloads/%(title)s.%(ext)s',
-        'keepvideo': False,
     }
             '''
             Create a YoutubeDL object with the given options passed in, extract the information about the link
